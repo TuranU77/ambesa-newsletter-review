@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMBESA Newsletter — Review & Annotationen</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif; background:#ebedf0; color:#333; }
+
+  /* ── Top Bar ── */
+  .top-bar {
+    background:#fff;
+    border-bottom:1px solid #ddd;
+    padding:16px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky; top:0; z-index:100;
+    box-shadow:0 1px 4px rgba(0,0,0,.06);
+  }
+  .top-bar h1 { font-size:16px; font-weight:700; color:#1a3c2a; }
+  .top-bar h1 span { color:#d4a843; }
+  .top-bar .meta { font-size:12px; color:#888; }
+  .legend { display:flex; gap:16px; align-items:center; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:#555; }
+  .legend-dot { width:10px; height:10px; border-radius:50%; }
+
+  /* ── Scroll indicator ── */
+  .scroll-progress {
+    position:fixed;
+    top:52px; left:0;
+    height:3px;
+    background:linear-gradient(90deg,#2ecc71,#d4a843);
+    z-index:200;
+    transition:width .1s;
+  }
+
+  /* ════════════════════════════════════════
+     SCHEMA / BLUEPRINT HERO SECTION
+     ════════════════════════════════════════ */
+  .schema-hero {
+    background:#fff;
+    border-bottom:1px solid #ddd;
+    padding:50px 40px 60px;
+  }
+  .schema-inner {
+    max-width:1480px;
+    margin:0 auto;
+  }
+  .schema-title {
+    text-align:center;
+    margin-bottom:44px;
+  }
+  .schema-title h2 {
+    font-size:26px;
+    font-weight:800;
+    color:#1a3c2a;
+    margin-bottom:6px;
+  }
+  .schema-title p { font-size:14px; color:#888; }
+
+  /* Three-column compare + summary */
+  .schema-compare {
+    display:grid;
+    grid-template-columns:1fr 60px 1fr 40px 280px;
+    gap:0;
+    align-items:start;
+  }
+
+  /* ── Changes summary panel ── */
+  .changes-panel {
+    padding:0;
+    align-self:start;
+    position:sticky;
+    top:80px;
+  }
+  .schema-spacer { /* empty grid cell for gap */ }
+  .changes-panel h3 {
+    font-size:13px;
+    font-weight:700;
+    color:#1a3c2a;
+    margin-bottom:16px;
+    padding-bottom:10px;
+    border-bottom:2px solid #1a3c2a;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .change-item {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .change-icon {
+    width:24px; height:24px;
+    border-radius:5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    flex-shrink:0;
+    font-weight:700;
+    color:#fff;
+  }
+  .ci-green { background:#2ecc71; }
+  .ci-gold { background:#d4a843; }
+  .ci-blue { background:#3498db; }
+  .ci-red { background:#e74c3c; }
+  .ci-purple { background:#9b59b6; }
+  .change-text {
+    font-size:12.5px;
+    line-height:1.45;
+    color:#444;
+  }
+  .change-text strong { color:#1a3c2a; }
+  .schema-col {
+    border-radius:12px;
+    padding:22px 18px;
+    border:2px solid #e0e0e0;
+    background:#fafafa;
+    max-width:420px;
+  }
+  .schema-col.is-old { opacity:.7; }
+  .schema-col.is-new {
+    border-color:#1a3c2a;
+    box-shadow:0 4px 24px rgba(26,60,42,.1);
+    opacity:1;
+    background:#fff;
+  }
+  .schema-col-header {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    padding-bottom:12px;
+    border-bottom:1px solid #e0e0e0;
+  }
+  .schema-col-header .badge {
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:4px;
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .badge-old { background:#f0f0f0; color:#999; }
+  .badge-new { background:#1a3c2a; color:#fff; }
+  .schema-col-header span { font-size:13px; font-weight:600; color:#888; }
+  .is-new .schema-col-header span { color:#1a3c2a; }
+
+  /* ── Funnel stages (grouped blocks) ── */
+  .funnel-stage {
+    border:1.5px solid #e0e0e0;
+    border-radius:8px;
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .is-new .funnel-stage { border-color:#d9e8df; }
+
+  .funnel-head {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .funnel-head .f-num {
+    width:20px; height:20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    font-weight:800;
+    flex-shrink:0;
+  }
+
+  /* Old stages — all grey */
+  .is-old .funnel-head {
+    background:#f0f0f0;
+    color:#aaa;
+  }
+  .is-old .funnel-head .f-num { background:#ddd; color:#999; }
+  .is-old .funnel-body { background:#f8f8f8; }
+
+  /* New stage colors */
+  .fh-hook  { background:#e8f4fd; color:#2980b9; }
+  .fh-hook .f-num  { background:#3498db; color:#fff; }
+  .fh-context { background:#f0f0f8; color:#7f8c8d; }
+  .fh-context .f-num { background:#95a5a6; color:#fff; }
+  .fh-value { background:#fef9ec; color:#8a6d1b; }
+  .fh-value .f-num { background:#d4a843; color:#fff; }
+  .fh-proof { background:#f3eef8; color:#7d3c98; }
+  .fh-proof .f-num { background:#9b59b6; color:#fff; }
+  .fh-close { background:#eefbf0; color:#1a7a3a; }
+  .fh-close .f-num { background:#2ecc71; color:#fff; }
+
+  .funnel-body {
+    padding:6px 12px 8px;
+    background:#fff;
+  }
+
+  .f-item {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:5px 0;
+    font-size:11.5px;
+    color:#666;
+  }
+  .f-item:not(:last-child) { border-bottom:1px dashed #eee; }
+
+  .f-dot {
+    width:7px; height:7px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .f-dot-grey { background:#ccc; }
+  .f-dot-blue { background:#3498db; }
+  .f-dot-green { background:#2ecc71; }
+  .f-dot-gold { background:#d4a843; }
+  .f-dot-purple { background:#9b59b6; }
+  .f-dot-red { background:#e74c3c; }
+
+  .f-item .f-tag {
+    font-size:8px;
+    padding:1px 5px;
+    border-radius:2px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-left:auto;
+    flex-shrink:0;
+  }
+  .ft-new { background:#d4f5dc; color:#1a8a4a; }
+  .ft-opt { background:#e8f0fe; color:#3498db; }
+  .ft-cta { background:#fef3d4; color:#8a6d1b; }
+  .ft-cut { background:#fde8e8; color:#c0392b; }
+  .ft-same { background:#f0f0f0; color:#999; }
+
+  /* "Flat" indicator for old structure */
+  .flat-indicator {
+    margin-top:12px;
+    padding:10px;
+    background:#f5f5f5;
+    border-radius:6px;
+    text-align:center;
+    font-size:11px;
+    color:#aaa;
+  }
+  .flat-indicator strong { color:#999; }
+
+  /* Funnel result for new */
+  .funnel-result {
+    margin-top:12px;
+    padding:10px;
+    background:#eefbf0;
+    border:1.5px solid #2ecc71;
+    border-radius:6px;
+    text-align:center;
+    font-size:11px;
+    color:#1a8a4a;
+  }
+  .funnel-result strong { font-size:16px; }
+
+  /* Arrow between columns */
+  .schema-arrow {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding-top:80px;
+  }
+  .schema-arrow svg { color:#d4a843; }
+  .schema-arrow-label {
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    font-size:10px;
+    font-weight:700;
+    color:#d4a843;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-top:8px;
+  }
+
+  /* Scroll prompt */
+  .scroll-prompt {
+    text-align:center;
+    margin-top:44px;
+    animation:bounce 2s infinite;
+  }
+  .scroll-prompt p { font-size:13px; color:#999; margin-bottom:6px; }
+  .scroll-prompt .arrow-down { font-size:20px; color:#d4a843; }
+  @keyframes bounce {
+    0%,100% { transform:translateY(0); }
+    50% { transform:translateY(6px); }
+  }
+
+  /* ════════════════════════════════════════
+     SUMMARY BAR
+     ════════════════════════════════════════ */
+  .summary-bar {
+    background:#fff;
+    border-top:1px solid #e0e0e0;
+    border-bottom:1px solid #e0e0e0;
+    padding:20px 40px;
+    display:flex;
+    justify-content:center;
+    gap:50px;
+  }
+  .summary-stat { text-align:center; }
+  .summary-stat .num { font-size:28px; font-weight:800; }
+  .summary-stat .label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:2px; }
+  .stat-green .num { color:#2ecc71; }
+  .stat-gold .num { color:#d4a843; }
+  .stat-blue .num { color:#3498db; }
+  .stat-red .num { color:#e74c3c; }
+
+  /* ════════════════════════════════════════
+     3-COLUMN DETAIL LAYOUT
+     ════════════════════════════════════════ */
+  .detail-header {
+    text-align:center;
+    padding:40px 20px 10px;
+  }
+  .detail-header h2 { font-size:20px; color:#1a3c2a; font-weight:700; }
+  .detail-header p { font-size:13px; color:#999; margin-top:4px; }
+
+  /* Scrollbar styling for old newsletter column */
+  .col-left::-webkit-scrollbar { width:4px; }
+  .col-left::-webkit-scrollbar-thumb { background:#ccc; border-radius:2px; }
+  .col-left::-webkit-scrollbar-track { background:transparent; }
+
+  .layout {
+    display:grid;
+    grid-template-columns:540px 540px 240px;
+    gap:0 20px;
+    justify-content:center;
+    padding:10px 20px 60px;
+  }
+  .col-left, .col-right {
+    padding:20px 0;
+    position:relative;
+    min-height:100px;
+  }
+  /* Old newsletter screenshots column — scrolls with page */
+  .col-left {
+    /* no sticky — scrolls naturally alongside the new newsletter */
+  }
+  .col-left .old-newsletter-label {
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#999;
+    margin-bottom:12px;
+    text-align:center;
+    padding:8px 0;
+    background:#f0f0f0;
+    border-radius:6px;
+  }
+  .col-left img {
+    display:block;
+    width:100%;
+    border-radius:4px;
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+    margin-bottom:4px;
+  }
+
+  /* ── Annotation Cards (light mode) ── */
+  .note {
+    padding:14px 16px;
+    border-radius:8px;
+    font-size:12.5px;
+    line-height:1.55;
+    position:absolute;
+    left:70px; right:0;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s, opacity .3s;
+    border-left:3px solid transparent;
+    background:#fff;
+  }
+  .note:hover {
+    transform:translateX(-4px);
+    box-shadow:0 4px 16px rgba(0,0,0,.08);
+  }
+
+  .note .tag {
+    display:inline-block;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:3px;
+    margin-bottom:8px;
+  }
+  .note h3 { font-size:13px; font-weight:700; margin-bottom:5px; color:#1a3c2a; }
+  .note p { color:#666; font-size:12px; line-height:1.5; }
+  .note .old {
+    color:#c0392b;
+    font-size:11px;
+    margin-top:6px;
+    padding:6px 8px;
+    background:#fdf0f0;
+    border-radius:4px;
+  }
+  .note .new {
+    color:#1a8a4a;
+    font-size:11px;
+    margin-top:4px;
+    padding:6px 8px;
+    background:#eefbf0;
+    border-radius:4px;
+  }
+
+  /* Color variants — light */
+  .note-green  { border-left-color:#2ecc71; }
+  .note-green .tag  { background:#2ecc71; color:#fff; }
+  .note-blue   { border-left-color:#3498db; }
+  .note-blue .tag   { background:#3498db; color:#fff; }
+  .note-gold   { border-left-color:#d4a843; }
+  .note-gold .tag   { background:#d4a843; color:#fff; }
+  .note-red    { border-left-color:#e74c3c; }
+  .note-red .tag    { background:#e74c3c; color:#fff; }
+  .note-purple { border-left-color:#9b59b6; }
+  .note-purple .tag { background:#9b59b6; color:#fff; }
+
+  /* ── Spacers ── */
+  .spacer { flex:0 0 auto; }
+
+  /* Note: annotations use position:absolute, column needs explicit height */
+  .col-right { overflow:visible; }
+
+  /* ── Newsletter Column ── */
+  .col-center {
+    background:#f4f4f4;
+    border-radius:10px;
+    overflow:visible;
+    box-shadow:0 2px 20px rgba(0,0,0,.1);
+    position:relative;
+  }
+
+  /* ── Funnel Stage Markers (right edge of newsletter) ── */
+  .stage-markers {
+    position:absolute;
+    top:0; right:0;
+    width:0;
+    height:100%;
+    z-index:20;
+    pointer-events:none;
+  }
+  .stage-marker {
+    position:absolute;
+    left:0;
+    display:flex;
+    align-items:center;
+    gap:0;
+    pointer-events:auto;
+  }
+  /* Horizontal line extending left to newsletter edge */
+  .stage-marker .stage-line {
+    width:22px;
+    height:2px;
+    flex-shrink:0;
+  }
+  /* The badge pill */
+  .stage-marker .stage-badge {
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:4px 10px 4px 6px;
+    border-radius:0 14px 14px 0;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    white-space:nowrap;
+    box-shadow:0 1px 4px rgba(0,0,0,.1);
+  }
+  .stage-marker .stage-num {
+    width:18px; height:18px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    font-weight:800;
+    color:#fff;
+    flex-shrink:0;
+  }
+  /* Color variants */
+  .sm-hook .stage-line   { background:#3498db; }
+  .sm-hook .stage-badge  { background:#e8f4fd; color:#2980b9; }
+  .sm-hook .stage-num    { background:#3498db; }
+
+  .sm-context .stage-line  { background:#95a5a6; }
+  .sm-context .stage-badge { background:#f0f0f8; color:#7f8c8d; }
+  .sm-context .stage-num   { background:#95a5a6; }
+
+  .sm-value .stage-line  { background:#d4a843; }
+  .sm-value .stage-badge { background:#fef9ec; color:#8a6d1b; }
+  .sm-value .stage-num   { background:#d4a843; }
+
+  .sm-proof .stage-line  { background:#9b59b6; }
+  .sm-proof .stage-badge { background:#f3eef8; color:#7d3c98; }
+  .sm-proof .stage-num   { background:#9b59b6; }
+
+  .sm-close .stage-line  { background:#2ecc71; }
+  .sm-close .stage-badge { background:#eefbf0; color:#1a7a3a; }
+  .sm-close .stage-num   { background:#2ecc71; }
+
+  /* ════════════════════════════════════════
+     TAB SWITCHER
+     ════════════════════════════════════════ */
+  .newsletter-tabs-wrapper {
+    padding:20px 0;
+    text-align:center;
+    background:#f4f4f4;
+  }
+
+  .newsletter-tabs {
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    align-items:flex-end;
+    margin-bottom:16px;
+  }
+
+  .tab-button {
+    padding:12px 28px;
+    border:2px solid #1a3c2a;
+    border-radius:6px;
+    background:#fff;
+    color:#1a3c2a;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.2s ease;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+
+  .tab-button:hover:not(.active) {
+    background:#f9f9f9;
+    transform:translateY(-2px);
+  }
+
+  .tab-button.active {
+    background:#1a3c2a;
+    color:#fff;
+    box-shadow:0 4px 12px rgba(26,60,42,.2);
+  }
+
+  .tab-button .label {
+    font-size:14px;
+    font-weight:700;
+  }
+
+  .tab-button .descriptor {
+    font-size:11px;
+    font-weight:500;
+    opacity:0.85;
+  }
+
+  .version-info {
+    padding:14px 20px;
+    background:#fff;
+    border:1px solid #e0e0e0;
+    border-radius:6px;
+    font-size:12px;
+    color:#666;
+    max-width:600px;
+    margin:0 auto;
+  }
+
+  .version-info strong { color:#1a3c2a; }
+
+  .newsletter-container {
+    position:relative;
+  }
+
+  #newsletter-a, #newsletter-b {
+    transition:opacity 0.3s ease;
+  }
+
+  #newsletter-a { display:block; opacity:1; }
+  #newsletter-b { display:none; opacity:0; }
+
+  #newsletter-a.active { display:block; opacity:1; }
+  #newsletter-b.active { display:block; opacity:1; }
+
+  /* Section highlight on hover */
+  .section-wrap {
+    position:relative;
+    transition:outline .15s;
+  }
+  .section-wrap:hover {
+    outline:2px solid rgba(212,168,67,.5);
+    outline-offset:-2px;
+  }
+  .section-label {
+    display:none;
+    position:absolute;
+    top:4px; right:4px;
+    background:#d4a843;
+    color:#fff;
+    font-size:9px;
+    font-weight:700;
+    padding:2px 6px;
+    border-radius:3px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    z-index:10;
+  }
+  .section-wrap:hover .section-label { display:block; }
+
+  /* ── CTA counter badge ── */
+  .cta-badge {
+    position:absolute;
+    width:22px; height:22px;
+    background:#d4a843;
+    color:#fff;
+    font-size:10px;
+    font-weight:800;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    top:8px; left:8px;
+    z-index:10;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+
+  /* Annotation visibility is controlled by JS alignNotes() */
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div>
+    <h1><span>AMBESA.com</span> — Newsletter Redesign Review</h1>
+    <div class="meta">Edition 04 · März 2026 · Zwei Versionen zum Vergleichen</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div>Neu</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div>Optimiert</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d4a843"></div>CTA / Strategie</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>Gekürzt</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCHEMA: VORHER vs. NACHHER (Funnel)
+     ═══════════════════════════════════════ -->
+<div class="schema-hero">
+  <div class="schema-inner">
+
+    <div class="schema-title">
+      <h2>Newsletter-Aufbau: Vorher vs. Nachher</h2>
+      <p>Von flacher Struktur zu klarem Vendor-Akquise-Funnel</p>
+    </div>
+
+    <div class="schema-compare">
+
+      <!-- ── VORHER: Flat structure ── -->
+      <div class="schema-col is-old">
+        <div class="schema-col-header">
+          <div class="badge badge-old">Vorher</div>
+          <span>Edition 03</span>
+        </div>
+
+        <div class="flat-indicator"><strong>Flat structure:</strong> Alles linear, keine Funnel-Logik</div>
+
+        <div style="margin-top:14px; font-size:12px; color:#888;">
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Long hero article</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Photo grid</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Regional comparison</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Vendor benefits (weak CTA)</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Vendor spotlight</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Quote break</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Events</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Funding (long list)</div>
+          <div class="f-item"><div class="f-dot f-dot-grey"></div> Final CTA</div>
+        </div>
+      </div>
+
+      <div class="schema-spacer"></div>
+
+      <!-- ── NACHHER: Funnel structure ── -->
+      <div class="schema-col is-new">
+        <div class="schema-col-header">
+          <div class="badge badge-new">Nachher</div>
+          <span>Edition 04</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-head fh-hook">
+            <div class="f-num">1</div>
+            <span>Hook</span>
+          </div>
+          <div class="funnel-body">
+            <div class="f-item"><div class="f-dot f-dot-blue"></div> <strong>Hero:</strong> Vendor-first value prop</div>
+            <div class="f-item"><div class="f-dot f-dot-blue"></div> Social proof leiste (Zahlen)</div>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-head fh-context">
+            <div class="f-num">2</div>
+            <span>Context</span>
+          </div>
+          <div class="funnel-body">
+            <div class="f-item"><div class="f-dot f-dot-gold"></div> Editorial: Warum jetzt <span class="f-tag ft-opt">Gekürzt</span></div>
+            <div class="f-item"><div class="f-dot f-dot-gold"></div> Regional breakdown</div>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-head fh-value">
+            <div class="f-num">3</div>
+            <span>Value</span>
+          </div>
+          <div class="funnel-body">
+            <div class="f-item"><div class="f-dot f-dot-gold"></div> <strong>&quot;Why AMBESA&quot;</strong> Benefits <span class="f-tag ft-new">Neu</span></div>
+            <div class="f-item"><div class="f-dot f-dot-gold"></div> Vendor spotlight (proof)</div>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-head fh-proof">
+            <div class="f-num">4</div>
+            <span>Proof</span>
+          </div>
+          <div class="funnel-body">
+            <div class="f-item"><div class="f-dot f-dot-purple"></div> Events (context) <span class="f-tag ft-opt">Gekürzt</span></div>
+            <div class="f-item"><div class="f-dot f-dot-purple"></div> Funding (opportunities)</div>
+          </div>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-head fh-close">
+            <div class="f-num">5</div>
+            <span>Close</span>
+          </div>
+          <div class="funnel-body">
+            <div class="f-item"><div class="f-dot f-dot-green"></div> Final CTA (stronger)</div>
+            <div class="f-item"><div class="f-dot f-dot-green"></div> Footer</div>
+          </div>
+        </div>
+
+        <div class="funnel-result"><strong>Conversion-focused funnel</strong></div>
+      </div>
+
+      <div class="schema-spacer"></div>
+
+      <!-- ── Changes panel ── -->
+      <div class="changes-panel">
+        <h3>Changes</h3>
+
+        <div class="change-item">
+          <div class="change-icon ci-blue">+</div>
+          <div class="change-text"><strong>Hook stage</strong> – Sofortige Value-Prop, nicht Artikel</div>
+        </div>
+
+        <div class="change-item">
+          <div class="change-icon ci-blue">+</div>
+          <div class="change-text"><strong>Social proof</strong> – Harte Zahlen vor Benefits</div>
+        </div>
+
+        <div class="change-item">
+          <div class="change-icon ci-gold">~</div>
+          <div class="change-text"><strong>Editorial</strong> – Halbiert auf 80 Worte</div>
+        </div>
+
+        <div class="change-item">
+          <div class="change-icon ci-blue">+</div>
+          <div class="change-text"><strong>&quot;Why AMBESA&quot;</strong> – Vendor-spezifische Benefits</div>
+        </div>
+
+        <div class="change-item">
+          <div class="change-icon ci-gold">~</div>
+          <div class="change-text"><strong>Events</strong> – Kompakter, mit Vendor-Nudge</div>
+        </div>
+
+        <div class="change-item">
+          <div class="change-icon ci-green">!</div>
+          <div class="change-text"><strong>Funnel logic</strong> – 5 stages statt linear</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="scroll-prompt">
+      <p>↓ Nach unten scrollen zum Newsletter-Vergleich ↓</p>
+      <div class="arrow-down">⬇</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SUMMARY BAR
+     ═══════════════════════════════════════ -->
+<div class="summary-bar">
+  <div class="summary-stat stat-blue">
+    <div class="num">2</div>
+    <div class="label">Versions</div>
+  </div>
+  <div class="summary-stat stat-green">
+    <div class="num">5</div>
+    <div class="label">Funnel Stages</div>
+  </div>
+  <div class="summary-stat stat-gold">
+    <div class="num">~32%</div>
+    <div class="label">Längenreduktion (v2b)</div>
+  </div>
+  <div class="summary-stat stat-red">
+    <div class="num">3</div>
+    <div class="label">CTAs</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     3-COLUMN DETAIL LAYOUT WITH TAB SWITCHER
+     ═══════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- ═══ LEFT COLUMN: ALTER NEWSLETTER (Vorher) ═══ -->
+  <div class="col-left" id="col-left">
+    <div class="old-newsletter-label">Vorher — Edition 03 (Original)</div>
+    <img src="images/old-newsletter-1.png" alt="Original Newsletter Edition 03" />
+  </div>
+
+  <!-- ═══ CENTER: NEWSLETTER WITH TAB SWITCHER ═══ -->
+  <div class="col-center">
+
+    <!-- Tab Switcher -->
+    <div class="newsletter-tabs-wrapper">
+      <div class="newsletter-tabs">
+        <button class="tab-button active" id="tab-a-btn" onclick="switchVersion('a')">
+          <span class="label">Version A — Emotional</span>
+          <span class="descriptor">More photos, testimonials, longer text</span>
+        </button>
+        <button class="tab-button" id="tab-b-btn" onclick="switchVersion('b')">
+          <span class="label">Version B — Optimiert</span>
+          <span class="descriptor">Lean, funnel-focused, conversion</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Newsletter Container -->
+    <div class="newsletter-container">
+
+      <!-- ═══════════════════════════════════════════════════════
+           VERSION A — EMOTIONAL (MORE PHOTOS, TESTIMONIALS, LONGER)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="newsletter-a">
+
+        <!-- Top Bar -->
+        <div class="section-wrap" id="sec-header">
+          <div style="background-color:#1a3c2a;padding:6px 30px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="color:#ffffff;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">The Leading Pan-African B2B E-commerce Marketplace</td>
+              <td align="right" style="color:#d4a843;font-size:11px;font-family:Arial,sans-serif;">03/26 &nbsp;|&nbsp; W4</td>
+            </tr>
+            </table>
+          </div>
+          <div style="background-color:#1a3c2a;padding:20px 30px;text-align:center;">
+            <img src="images/ambesa-logo-gold.svg" alt="AMBESA.com" style="display:inline-block;width:50%;height:auto;" />
+          </div>
+          <div style="background-color:#245a3a;padding:10px 30px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="color:#ffffff;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:1px;font-family:Arial,sans-serif;">Newsletter</td>
+              <td align="right" style="color:#c8dcc8;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;font-family:Arial,sans-serif;">African B2B Insights</td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Hero – EMOTIONAL VERSION (larger, with globe, more copy) -->
+        <div class="section-wrap" id="sec-hero">
+          <div class="section-label">Hero</div>
+          <div style="position:relative;background-color:#1a3c2a;">
+            <div style="width:100%;height:320px;background:linear-gradient(rgba(26, 60, 42, 0.75), rgba(26, 60, 42, 0.75)), url('images/hero-handshake.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr><td style="padding:60px 40px;text-align:center;">
+                <h1 style="margin:0 0 14px;font-size:36px;line-height:1.25;color:#ffffff;font-weight:800;">
+                  Trade Without Borders.<br>Grow Without Limits.
+                </h1>
+                <p style="margin:0 0 24px;font-size:16px;line-height:1.5;color:#c8dcc8;max-width:500px;display:inline-block;">
+                  AMBESA.com is building the future of Pan-African B2B commerce. Be part of the movement. Connect with verified suppliers and buyers across the continent.
+                </p>
+                <div style="text-align:center;">
+                  <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:14px 40px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;letter-spacing:0.5px;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);">Join AMBESA — Get Started</a>
+                </div>
+              </td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="section-wrap" id="sec-proof">
+          <div class="section-label">Social Proof</div>
+          <div style="background-color:#f0efe6;padding:0;font-family:Arial,sans-serif;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">12+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Countries</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">500+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Verified Vendors</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">3k+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Active Buyers</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">10k+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Monthly Searches</div>
+              </td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Editorial – LONGER VERSION with extended copy -->
+        <div class="section-wrap" id="sec-editorial">
+          <div style="padding:35px 40px 10px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Market Insight</p>
+            <h2 style="margin:0 0 14px;font-size:22px;color:#1a3c2a;font-weight:700;line-height:1.3;">Africa Doesn't Need One Model. It Needs Connected Models.</h2>
+            <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#444;">
+              Africa's startup and trade ecosystems are evolving differently — and that's a strength. West Africa leads with large domestic markets and rapid fintech expansion, while East Africa pioneers mobile-first coordination frameworks and cross-border digital infrastructure.
+            </p>
+            <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#444;">
+              Southern Africa brings established industrial networks and regulatory maturity. North Africa offers proximity to European and Middle Eastern markets, and Central Africa holds vast untapped natural resources and commodity trading potential.
+            </p>
+            <p style="margin:0 0 5px;font-size:15px;line-height:1.65;color:#444;">
+              The real opportunity lies in building trusted bridges between these ecosystems — connecting suppliers, buyers, and partners across regions. That's exactly what AMBESA.com is built to do.
+            </p>
+          </div>
+        </div>
+
+        <!-- Regional comparison table -->
+        <div style="padding:0 40px 30px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td width="50%" style="background-color:#1a3c2a;padding:16px 20px;vertical-align:top;">
+              <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#d4a843;text-transform:uppercase;letter-spacing:1px;">West Africa</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#c8dcc8;">Large domestic markets · Rapid fintech & commerce growth · Infrastructure & regulatory advances</p>
+            </td>
+            <td width="50%" style="background-color:#245a3a;padding:16px 20px;vertical-align:top;">
+              <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#d4a843;text-transform:uppercase;letter-spacing:1px;">East Africa</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#c8dcc8;">Mobile-first ecosystems · Strong public-private frameworks · Integration-driven cross-border access</p>
+            </td>
+          </tr>
+          </table>
+        </div>
+
+        <!-- Yellow CTA Banner -->
+        <div style="padding:5px 40px 25px;text-align:center;">
+          <a href="https://ambesa.com" style="display:inline-block;padding:14px 36px;background:linear-gradient(to bottom,#f9e480,#e8c840);border-radius:50px;color:#1a3c2a;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.3);border-bottom:1px solid rgba(0,0,0,0.1);">Explore Verified Suppliers on AMBESA.com</a>
+        </div>
+
+        <!-- Why AMBESA Section -->
+        <div class="section-wrap" id="sec-why-ambesa">
+          <div class="section-label">Why AMBESA</div>
+          <div style="background-color:#faf9f3;padding:35px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">For Vendors</p>
+            <h2 style="margin:0 0 22px;font-size:22px;color:#1a3c2a;font-weight:700;">Why List on AMBESA.com?</h2>
+            <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#444;">
+              Whether you're a manufacturer in Lagos, an exporter in Nairobi, or a service provider in Johannesburg — AMBESA gives you a single storefront to reach verified B2B buyers across the entire continent.
+            </p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="50%" style="padding:0 12px 18px 0;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">🌍</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Pan-African Reach</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Access buyers across [X] African countries from one storefront.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+              <td width="50%" style="padding:0 0 18px 12px;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">✓</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Verified & Trusted</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Every vendor and buyer is verified — building trust across borders.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td width="50%" style="padding:0 12px 0 0;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">📊</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Visibility & Leads</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Get found by B2B buyers actively searching for your products.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+              <td width="50%" style="padding:0 0 0 12px;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">💰</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Free to Start</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Create your vendor profile and list products at no cost.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            </table>
+
+            <div style="text-align:center;margin-top:24px;">
+              <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:12px 32px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);">Become a Verified Vendor</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vendor Spotlight – ENHANCED with big photo -->
+        <div class="section-wrap" id="sec-spotlight">
+          <div class="section-label">Spotlight</div>
+          <div style="padding:35px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Vendor Spotlight</p>
+            <h2 style="margin:0 0 18px;font-size:22px;color:#1a3c2a;font-weight:700;">Aligned Group — From Local Garage to Pan-African Supplier</h2>
+
+            <img src="images/spotlight-workshop.png" alt="Aligned Group" width="600" style="display:block;width:100%;height:200px;object-fit:cover;border-radius:6px 6px 0 0;" />
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f7f2;border-radius:0 0 6px 6px;overflow:hidden;">
+            <tr><td style="padding:24px;">
+              <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#444;">
+                Serving the forklift and material-handling industry for over 15 years, <strong>Aligned Group</strong> grew from a small garage operation into a trusted engineering and equipment partner for businesses across South Africa.
+              </p>
+              <p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:#444;">
+                Since listing on AMBESA.com, Aligned Group has expanded their reach to new buyers across the continent — connecting with businesses that previously had no way to find them. [PLACEHOLDER — bitte echte Erfolgsgeschichte von AMBESA einholen]
+              </p>
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+              <tr>
+                <td width="25%" style="padding:0 3px 0 0;">
+                  <img src="images/product-forklift.png" alt="Forklift" style="display:block;width:100%;height:80px;object-fit:cover;border-radius:4px;" />
+                </td>
+                <td width="25%" style="padding:0 2px;">
+                  <img src="images/product-conveyor.png" alt="Conveyor" style="display:block;width:100%;height:80px;object-fit:cover;border-radius:4px;" />
+                </td>
+                <td width="25%" style="padding:0 2px;">
+                  <img src="images/product-cad.png" alt="CAD Design" style="display:block;width:100%;height:80px;object-fit:cover;border-radius:4px;" />
+                </td>
+                <td width="25%" style="padding:0 0 0 3px;">
+                  <img src="images/product-pallets.png" alt="Pallets" style="display:block;width:100%;height:80px;object-fit:cover;border-radius:4px;" />
+                </td>
+              </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:18px;">
+              <tr>
+                <td width="33%" style="text-align:center;padding:12px 5px;background-color:#1a3c2a;border-radius:4px 0 0 4px;">
+                  <div style="font-size:20px;font-weight:800;color:#d4a843;">[X]</div>
+                  <div style="font-size:10px;color:#c8dcc8;text-transform:uppercase;letter-spacing:0.5px;">New Markets</div>
+                </td>
+                <td width="34%" style="text-align:center;padding:12px 5px;background-color:#245a3a;">
+                  <div style="font-size:20px;font-weight:800;color:#d4a843;">[X]</div>
+                  <div style="font-size:10px;color:#c8dcc8;text-transform:uppercase;letter-spacing:0.5px;">Buyer Enquiries</div>
+                </td>
+                <td width="33%" style="text-align:center;padding:12px 5px;background-color:#1a3c2a;border-radius:0 4px 4px 0;">
+                  <div style="font-size:20px;font-weight:800;color:#d4a843;">6</div>
+                  <div style="font-size:10px;color:#c8dcc8;text-transform:uppercase;letter-spacing:0.5px;">Product Categories</div>
+                </td>
+              </tr>
+              </table>
+
+              <p style="margin:0;font-size:13px;color:#666;">Their offerings: Forklift sales & servicing · Material handling solutions · Custom-engineered systems · CAD design & manufacturing</p>
+            </td></tr>
+            </table>
+
+            <div style="text-align:center;margin-top:16px;">
+              <a href="https://ambesa.com/vendor/aligned-group" style="display:inline-block;padding:10px 24px;border:2px solid #1a3c2a;border-radius:50px;color:#1a3c2a;font-size:14px;font-weight:600;text-decoration:none;">View Aligned Group on AMBESA.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote / Testimonial – EMOTIONAL VERSION -->
+        <div class="section-wrap" id="sec-quote">
+          <div class="section-label">Quote</div>
+          <div style="background-color:#1a3c2a;padding:35px 50px;text-align:center;">
+            <p style="margin:0 0 12px;font-size:28px;color:#d4a843;font-weight:300;line-height:1;">&ldquo;</p>
+            <p style="margin:0 0 16px;font-size:17px;line-height:1.6;color:#ffffff;font-style:italic;">
+              [PLACEHOLDER — Zitat eines zufriedenen Vendors über AMBESA, z.B.: "AMBESA hat uns ermöglicht, Käufer in Ländern zu erreichen, die wir allein nie erschlossen hätten."]
+            </p>
+            <p style="margin:0;font-size:13px;color:#d4a843;font-weight:600;">[PLACEHOLDER — Name, Position, Firma]</p>
+          </div>
+        </div>
+
+        <!-- Events -->
+        <div class="section-wrap" id="sec-events">
+          <div class="section-label">Events</div>
+          <div style="position:relative;overflow:hidden;height:100px;">
+            <img src="images/events-banner.png" alt="" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.25) 100%);"></div>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 40px;">
+              <p style="margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#d4a843;font-weight:600;">Don't Miss</p>
+              <h2 style="margin:0;font-size:20px;color:#ffffff;font-weight:700;">Key B2B Events — Q1/Q2 2026</h2>
+            </div>
+          </div>
+          <div style="background-color:#f7f7f2;padding:20px 40px 30px;">
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #e0e0e0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Mar 11</div>
+                      <div style="font-size:11px;color:#fff;">Cape Town</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Africa Trade Conference 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Trade policy, digital integration & sustainable cross-border business.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #e0e0e0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Apr 22–24</div>
+                      <div style="font-size:11px;color:#fff;">Nairobi</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">CILT Africa Forum 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Logistics, transport & supply-chain forum for B2B connectivity.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Feb 25–26</div>
+                      <div style="font-size:11px;color:#fff;">Nairobi</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Sankalp Africa Summit 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Investment, entrepreneurship & cross-border growth in African markets.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            </table>
+
+            <p style="margin:18px 0 0;font-size:13px;color:#666;line-height:1.5;">
+              Attending an event? Make sure your vendor profile on AMBESA.com is up to date — buyers check before they meet.
+            </p>
+          </div>
+        </div>
+
+        <!-- SME Funding -->
+        <div class="section-wrap" id="sec-funding">
+          <div class="section-label">Funding</div>
+          <div style="padding:30px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Resources</p>
+            <h2 style="margin:0 0 14px;font-size:20px;color:#1a3c2a;font-weight:700;">Funding for African SMEs</h2>
+            <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#444;">Access to capital is critical for cross-border African businesses. Here are key programs to know:</p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;margin-bottom:8px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Pan-African Payment & Settlement System (PAPSS)</p>
+                <p style="margin:0;font-size:12px;color:#666;">Reduces dependency on foreign currencies for cross-border payments under AfCFTA.</p>
+              </td>
+            </tr>
+            <tr><td style="height:8px;"></td></tr>
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Afreximbank Trade Finance Facilities</p>
+                <p style="margin:0;font-size:12px;color:#666;">Working capital, guarantees, and trade finance for SMEs expanding regionally.</p>
+              </td>
+            </tr>
+            <tr><td style="height:8px;"></td></tr>
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Sanad Fund for MSME</p>
+                <p style="margin:0;font-size:12px;color:#666;">Sub-equity, credit lines, and trade finance guarantees for small enterprises.</p>
+              </td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Final CTA – EMOTIONAL VERSION -->
+        <div class="section-wrap" id="sec-cta-final">
+          <div class="section-label">CTA</div>
+          <div style="background:linear-gradient(135deg,#1a3c2a 0%,#2d6b45 60%,#1a3c2a 100%);padding:45px 40px;text-align:center;">
+            <p style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#d4a843;">Your Next Chapter Starts Here</p>
+            <h2 style="margin:0 0 12px;font-size:26px;color:#ffffff;font-weight:700;">Ready to Reach Buyers Across Africa?</h2>
+            <p style="margin:0 0 24px;font-size:15px;color:#c8dcc8;">Join [X] verified vendors already growing on AMBESA.com</p>
+            <div style="text-align:center;">
+              <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:14px 40px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);">Create Your Free Vendor Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color:#0f2a1c;padding:30px 40px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align:top;">
+              <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#ffffff;">AMBESA.com</p>
+              <p style="margin:0 0 3px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Firmenname]</p>
+              <p style="margin:0;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Adresse]</p>
+            </td>
+            <td align="right" style="vertical-align:top;">
+              <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#ffffff;">Contact</p>
+              <p style="margin:0 0 3px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — E-Mail]</p>
+              <p style="margin:0 0 12px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Telefon]</p>
+              <p style="margin:0 0 8px;font-size:12px;color:#d4a843;font-weight:600;">Get Social</p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">in</a></td>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">f</a></td>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">ig</a></td>
+                <td><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">X</a></td>
+              </tr></table>
+            </td>
+          </tr>
+          </table>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #1a3c2a;padding-top:16px;">
+          <tr>
+            <td style="font-size:11px;color:#5a7a5a;">
+              You're receiving this because you subscribed to African B2B Insights.<br>
+              <a href="#" style="color:#8aaa8a;text-decoration:underline;">Unsubscribe</a> &nbsp;|&nbsp; <a href="#" style="color:#8aaa8a;text-decoration:underline;">Privacy Policy</a>
+            </td>
+            <td align="right" style="font-size:11px;color:#5a7a5a;">
+              &copy; 2026 AMBESA.com
+            </td>
+          </tr>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           VERSION B — OPTIMIERT (LEAN, FUNNEL-FOCUSED, CONVERSION)
+           ═══════════════════════════════════════════════════════ -->
+      <div id="newsletter-b">
+
+        <!-- Top Bar -->
+        <div class="section-wrap" id="sec-header">
+          <div style="background-color:#1a3c2a;padding:6px 30px;text-align:center;">
+            <p style="margin:0;color:#ffffff;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">The Leading Pan-African B2B E-commerce Marketplace:</p>
+          </div>
+          <div style="background-color:#1a3c2a;padding:20px 30px;text-align:center;">
+            <img src="images/ambesa-logo-gold.svg" alt="AMBESA.com" style="display:inline-block;width:50%;height:auto;" />
+          </div>
+          <div style="background-color:#245a3a;padding:10px 30px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="color:#ffffff;font-size:26px;font-weight:800;text-transform:uppercase;letter-spacing:1px;font-family:Arial,sans-serif;">Newsletter</td>
+              <td align="right" style="color:#c8dcc8;font-size:13px;font-family:Arial,sans-serif;">03/26 &nbsp;|&nbsp; W4</td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Hero – OPTIMIZED VERSION (vendor-first, compact) -->
+        <div class="section-wrap" id="sec-hero">
+          <div class="section-label">Hero</div>
+          <div style="background:linear-gradient(135deg,#1a3c2a 0%,#2d6b45 100%);padding:45px 40px;text-align:center;font-family:Arial,sans-serif;">
+            <p style="margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:2px;color:#d4a843;font-weight:600;">Grow Your Business Across Africa</p>
+            <h1 style="margin:0 0 18px;font-size:30px;line-height:1.25;color:#ffffff;font-weight:800;">Your Products. 54 Markets.<br>One Platform.</h1>
+            <p style="margin:0 0 28px;font-size:16px;line-height:1.6;color:#c8dcc8;max-width:520px;display:inline-block;">AMBESA.com connects verified African suppliers with thousands of B2B buyers across the continent. List your products and reach new markets — no middlemen, no borders.</p>
+            <div style="text-align:center;">
+              <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:14px 36px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);letter-spacing:0.5px;">List Your Business — It's Free</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Proof -->
+        <div class="section-wrap" id="sec-proof">
+          <div class="section-label">Social Proof</div>
+          <div style="background-color:#f0efe6;padding:0;font-family:Arial,sans-serif;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">12+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Countries</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">500+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Verified Vendors</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;border-right:1px solid #ddd;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">3k+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Active Buyers</div>
+              </td>
+              <td width="25%" style="padding:22px 10px;text-align:center;">
+                <div style="font-size:26px;font-weight:800;color:#1a3c2a;">10k+</div>
+                <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;">Monthly Searches</div>
+              </td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Editorial – SHORTENED VERSION -->
+        <div class="section-wrap" id="sec-editorial">
+          <div style="padding:35px 40px 10px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Market Insight</p>
+            <h2 style="margin:0 0 14px;font-size:22px;color:#1a3c2a;font-weight:700;line-height:1.3;">Africa Doesn't Need One Model. It Needs Connected Models.</h2>
+            <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#444;">
+              Africa's startup and trade ecosystems are evolving differently — and that's a strength. West Africa leads with large domestic markets and rapid fintech expansion, while East Africa pioneers mobile-first coordination frameworks and cross-border digital infrastructure.
+            </p>
+            <p style="margin:0 0 5px;font-size:15px;line-height:1.65;color:#444;">
+              The real opportunity lies in building trusted bridges between these ecosystems — connecting suppliers, buyers, and partners across regions. That's exactly what AMBESA.com is built to do.
+            </p>
+          </div>
+        </div>
+
+        <!-- Regional comparison table -->
+        <div style="padding:10px 40px 30px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td width="50%" style="background-color:#1a3c2a;padding:16px 20px;vertical-align:top;">
+              <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#d4a843;text-transform:uppercase;letter-spacing:1px;">West Africa</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#c8dcc8;">Large domestic markets · Rapid fintech & commerce growth · Infrastructure & regulatory advances</p>
+            </td>
+            <td width="50%" style="background-color:#245a3a;padding:16px 20px;vertical-align:top;">
+              <p style="margin:0 0 10px;font-size:13px;font-weight:700;color:#d4a843;text-transform:uppercase;letter-spacing:1px;">East Africa</p>
+              <p style="margin:0;font-size:13px;line-height:1.6;color:#c8dcc8;">Mobile-first ecosystems · Strong public-private frameworks · Integration-driven cross-border access</p>
+            </td>
+          </tr>
+          </table>
+        </div>
+
+        <!-- Why AMBESA Section -->
+        <div class="section-wrap" id="sec-why-ambesa">
+          <div class="section-label">Why AMBESA</div>
+          <div style="background-color:#faf9f3;padding:35px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">For Vendors</p>
+            <h2 style="margin:0 0 22px;font-size:22px;color:#1a3c2a;font-weight:700;">Why List on AMBESA.com?</h2>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="50%" style="padding:0 12px 18px 0;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">🌍</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Pan-African Reach</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Access buyers across [X] African countries from one storefront.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+              <td width="50%" style="padding:0 0 18px 12px;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">✓</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Verified & Trusted</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Every vendor and buyer is verified — building trust across borders.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td width="50%" style="padding:0 12px 0 0;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">📊</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Visibility & Leads</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Get found by B2B buyers actively searching for your products.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+              <td width="50%" style="padding:0 0 0 12px;vertical-align:top;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width:40px;vertical-align:top;padding-top:2px;">
+                    <div style="width:32px;height:32px;background-color:#1a3c2a;border-radius:50%;text-align:center;line-height:32px;font-size:16px;">💰</div>
+                  </td>
+                  <td style="padding-left:10px;">
+                    <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a3c2a;">Free to Start</p>
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#555;">Create your vendor profile and list products at no cost.</p>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            </table>
+
+            <div style="text-align:center;margin-top:24px;">
+              <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:12px 32px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);">Become a Verified Vendor</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vendor Spotlight – SIMPLIFIED (no large hero photo) -->
+        <div class="section-wrap" id="sec-spotlight">
+          <div class="section-label">Spotlight</div>
+          <div style="padding:35px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Vendor Spotlight</p>
+            <h2 style="margin:0 0 18px;font-size:22px;color:#1a3c2a;font-weight:700;">Aligned Group — From Local Garage to Pan-African Supplier</h2>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f7f2;border-radius:6px;overflow:hidden;">
+            <tr><td style="padding:24px;">
+              <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#444;">
+                Serving the forklift and material-handling industry for over 15 years, <strong>Aligned Group</strong> grew from a small garage operation into a trusted engineering and equipment partner for businesses across South Africa.
+              </p>
+              <p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:#444;">
+                Since listing on AMBESA.com, Aligned Group has expanded their reach to new buyers across the continent — connecting with businesses that previously had no way to find them. [PLACEHOLDER — bitte echte Erfolgsgeschichte von AMBESA einholen]
+              </p>
+
+              <!-- Browser Mockup -->
+              <div style="margin:18px 0;border-radius:8px;overflow:hidden;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <!-- Browser Chrome -->
+                <div style="background:#f0f0f0;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #ddd;">
+                  <div style="display:flex;gap:5px;">
+                    <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></div>
+                    <div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e;"></div>
+                    <div style="width:10px;height:10px;border-radius:50%;background:#28c840;"></div>
+                  </div>
+                  <div style="flex:1;background:#fff;border-radius:4px;padding:4px 10px;font-size:11px;color:#666;font-family:Arial,sans-serif;border:1px solid #e0e0e0;">ambesa.com/vendor/aligned-group</div>
+                </div>
+                <!-- Page Content -->
+                <div style="background:#fff;padding:20px;">
+                  <div style="display:flex;gap:16px;align-items:flex-start;">
+                    <div style="width:50px;height:50px;background:#1a3c2a;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <span style="color:#d4a843;font-size:18px;font-weight:800;">AG</span>
+                    </div>
+                    <div style="flex:1;">
+                      <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#1a3c2a;">Aligned Group</p>
+                      <p style="margin:0 0 6px;font-size:11px;color:#888;">Verified Vendor · Johannesburg, South Africa</p>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <span style="display:inline-block;padding:2px 8px;background:#e8f5e9;color:#2e7d32;font-size:10px;border-radius:3px;">Forklifts</span>
+                        <span style="display:inline-block;padding:2px 8px;background:#e8f5e9;color:#2e7d32;font-size:10px;border-radius:3px;">Material Handling</span>
+                        <span style="display:inline-block;padding:2px 8px;background:#e8f5e9;color:#2e7d32;font-size:10px;border-radius:3px;">Engineering</span>
+                        <span style="display:inline-block;padding:2px 8px;background:#e8f5e9;color:#2e7d32;font-size:10px;border-radius:3px;">CAD Design</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="margin-top:14px;display:flex;gap:8px;">
+                    <div style="flex:1;height:60px;background:#f7f7f2;border-radius:4px;"></div>
+                    <div style="flex:1;height:60px;background:#f7f7f2;border-radius:4px;"></div>
+                    <div style="flex:1;height:60px;background:#f7f7f2;border-radius:4px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <p style="margin:0;font-size:13px;color:#666;">Their offerings: Forklift sales & servicing · Material handling solutions · Custom-engineered systems · CAD design & manufacturing</p>
+            </td></tr>
+            </table>
+
+            <div style="text-align:center;margin-top:16px;">
+              <a href="https://ambesa.com/vendor/aligned-group" style="display:inline-block;padding:10px 24px;background-color:#1a3c2a;border-radius:50px;color:#d4a843;font-size:14px;font-weight:600;text-decoration:none;">View Aligned Group on AMBESA.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events – COMPACT VERSION -->
+        <div class="section-wrap" id="sec-events">
+          <div class="section-label">Events</div>
+          <div style="padding:30px 40px 0;">
+            <p style="margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#d4a843;font-weight:600;">Don't Miss</p>
+            <h2 style="margin:0;font-size:20px;color:#1a3c2a;font-weight:700;">Key B2B Events — Q1/Q2 2026</h2>
+          </div>
+          <div style="padding:20px 40px 30px;">
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #e0e0e0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Mar 11</div>
+                      <div style="font-size:11px;color:#fff;">Cape Town</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Africa Trade Conference 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Trade policy, digital integration & sustainable cross-border business.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #e0e0e0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Apr 22–24</div>
+                      <div style="font-size:11px;color:#fff;">Nairobi</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">CILT Africa Forum 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Logistics, transport & supply-chain forum for B2B connectivity.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="80" style="vertical-align:top;">
+                    <div style="background-color:#1a3c2a;border-radius:4px;text-align:center;padding:8px 5px;">
+                      <div style="font-size:9px;color:#d4a843;text-transform:uppercase;font-weight:600;">Feb 25–26</div>
+                      <div style="font-size:11px;color:#fff;">Nairobi</div>
+                    </div>
+                  </td>
+                  <td style="padding-left:14px;vertical-align:top;">
+                    <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Sankalp Africa Summit 2026</p>
+                    <p style="margin:0 0 4px;font-size:12px;color:#666;">Investment, entrepreneurship & cross-border growth in African markets.</p>
+                    <a href="#" style="font-size:11px;color:#d4a843;font-weight:600;text-decoration:none;">Learn more →</a>
+                  </td>
+                </tr>
+                </table>
+              </td>
+            </tr>
+            </table>
+
+            <p style="margin:18px 0 0;font-size:13px;color:#666;line-height:1.5;">
+              Attending an event? Make sure your vendor profile on AMBESA.com is up to date — buyers check before they meet.
+            </p>
+          </div>
+        </div>
+
+        <!-- SME Funding – COMPACT VERSION -->
+        <div class="section-wrap" id="sec-funding">
+          <div class="section-label">Funding</div>
+          <div style="padding:30px 40px;">
+            <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#d4a843;font-weight:600;">Resources</p>
+            <h2 style="margin:0 0 14px;font-size:20px;color:#1a3c2a;font-weight:700;">Funding for African SMEs</h2>
+            <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#444;">Access to capital is critical for cross-border African businesses. Here are key programs to know:</p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;margin-bottom:8px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Pan-African Payment & Settlement System (PAPSS)</p>
+                <p style="margin:0;font-size:12px;color:#666;">Reduces dependency on foreign currencies for cross-border payments under AfCFTA.</p>
+              </td>
+            </tr>
+            <tr><td style="height:8px;"></td></tr>
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Afreximbank Trade Finance Facilities</p>
+                <p style="margin:0;font-size:12px;color:#666;">Working capital, guarantees, and trade finance for SMEs expanding regionally.</p>
+              </td>
+            </tr>
+            <tr><td style="height:8px;"></td></tr>
+            <tr>
+              <td style="padding:10px 14px;background-color:#f7f7f2;border-radius:4px;">
+                <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#1a3c2a;">Sanad Fund for MSME</p>
+                <p style="margin:0;font-size:12px;color:#666;">Sub-equity, credit lines, and trade finance guarantees for small enterprises.</p>
+              </td>
+            </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Final CTA – SIMPLE VERSION -->
+        <div class="section-wrap" id="sec-cta-final">
+          <div class="section-label">CTA</div>
+          <div style="background-color:#1a3c2a;padding:40px;text-align:center;">
+            <h2 style="margin:0 0 12px;font-size:24px;color:#ffffff;font-weight:700;">Ready to Reach Buyers Across Africa?</h2>
+            <p style="margin:0 0 24px;font-size:15px;color:#c8dcc8;">Join [X] verified vendors already growing on AMBESA.com</p>
+            <div style="text-align:center;">
+              <a href="https://ambesa.com/vendor-signup" style="display:inline-block;padding:14px 40px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 4px 8px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.3);border-top:1px solid rgba(255,255,255,0.25);border-bottom:1px solid rgba(0,0,0,0.15);">Create Your Free Vendor Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color:#0f2a1c;padding:30px 40px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align:top;">
+              <p style="margin:0 0 6px;font-size:16px;font-weight:700;color:#ffffff;">AMBESA.com</p>
+              <p style="margin:0 0 3px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Firmenname]</p>
+              <p style="margin:0;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Adresse]</p>
+            </td>
+            <td align="right" style="vertical-align:top;">
+              <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#ffffff;">Contact</p>
+              <p style="margin:0 0 3px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — E-Mail]</p>
+              <p style="margin:0 0 12px;font-size:12px;color:#8aaa8a;">[PLACEHOLDER — Telefon]</p>
+              <p style="margin:0 0 8px;font-size:12px;color:#d4a843;font-weight:600;">Get Social</p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">in</a></td>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">f</a></td>
+                <td style="padding-right:8px;"><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">ig</a></td>
+                <td><a href="#" style="display:inline-block;width:32px;height:32px;background-color:#d4a843;border-radius:50%;text-align:center;line-height:32px;text-decoration:none;color:#0f2a1c;font-size:15px;font-weight:700;">X</a></td>
+              </tr></table>
+            </td>
+          </tr>
+          </table>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #1a3c2a;padding-top:16px;">
+          <tr>
+            <td style="font-size:11px;color:#5a7a5a;">
+              You're receiving this because you subscribed to African B2B Insights.<br>
+              <a href="#" style="color:#8aaa8a;text-decoration:underline;">Unsubscribe</a> &nbsp;|&nbsp; <a href="#" style="color:#8aaa8a;text-decoration:underline;">Privacy Policy</a>
+            </td>
+            <td align="right" style="font-size:11px;color:#5a7a5a;">
+              &copy; 2026 AMBESA.com
+            </td>
+          </tr>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Funnel Stage Markers -->
+    <div class="stage-markers" id="stage-markers">
+      <div class="stage-marker sm-hook" data-stage-section="hero">
+        <div class="stage-line"></div>
+        <div class="stage-badge"><div class="stage-num">1</div>Hook</div>
+      </div>
+      <div class="stage-marker sm-context" data-stage-section="editorial">
+        <div class="stage-line"></div>
+        <div class="stage-badge"><div class="stage-num">2</div>Context</div>
+      </div>
+      <div class="stage-marker sm-value" data-stage-section="why-ambesa">
+        <div class="stage-line"></div>
+        <div class="stage-badge"><div class="stage-num">3</div>Value</div>
+      </div>
+      <div class="stage-marker sm-proof" data-stage-section="events">
+        <div class="stage-line"></div>
+        <div class="stage-badge"><div class="stage-num">4</div>Proof</div>
+      </div>
+      <div class="stage-marker sm-close" data-stage-section="cta-final">
+        <div class="stage-line"></div>
+        <div class="stage-badge"><div class="stage-num">5</div>Close</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ RIGHT COLUMN: ANNOTATIONEN ═══ -->
+  <div class="col-right" id="col-right">
+
+    <div class="note note-blue version-b-only" data-section="hero" onclick="highlightSection('hero')">
+      <div class="tag">Optimiert</div>
+      <h3>Hero: Vendor-First Messaging</h3>
+      <p>Statt redaktionellem Artikel sofort die Vendor-Value-Proposition.</p>
+      <div class="old">Vorher: Langer Artikel-Teaser</div>
+      <div class="new">Jetzt: &bdquo;Your Products. [X] Markets. One Platform.&ldquo; + sofortiger CTA</div>
+    </div>
+
+    <div class="note note-gold version-a-only" data-section="hero" onclick="highlightSection('hero')">
+      <div class="tag">Emotional</div>
+      <h3>Hero: Trade Without Borders</h3>
+      <p>Emotionaler Hero mit Hintergrundfoto und l&auml;ngerer Kopie. Fokus auf Storytelling.</p>
+      <div class="new">Foto-Hero + &bdquo;Trade Without Borders. Grow Without Limits.&ldquo;</div>
+    </div>
+
+    <div class="note note-gold" data-section="hero" onclick="highlightSection('hero')">
+      <div class="tag">CTA-Stil</div>
+      <h3>3D-Buttons: Warum?</h3>
+      <p>Goldene Pill-CTAs mit Gradient (hell&rarr;dunkel), Schatten und Lichtreflex. Wirkt haptisch und klickbar &mdash; erh&ouml;ht Click-Affordance in Flat-Design-Umgebungen.</p>
+    </div>
+
+    <div class="note note-green" data-section="proof" onclick="highlightSection('proof')">
+      <div class="tag">Neu</div>
+      <h3>Social Proof Leiste</h3>
+      <p>Vier harte Kennzahlen direkt nach dem Hero &mdash; erzeugt Vertrauen und FOMO.</p>
+      <div class="new">[X] Countries &middot; [X] Vendors &middot; [X] Buyers &middot; [X] Searches</div>
+      <p style="margin-top:6px;color:#e67e22;font-size:11px;">&#9888; Platzhalter &mdash; mit echten AMBESA-Zahlen ersetzen!</p>
+    </div>
+
+    <div class="note note-red version-b-only" data-section="editorial" onclick="highlightSection('editorial')">
+      <div class="tag">Gek&uuml;rzt</div>
+      <h3>Editorial: Stark reduziert</h3>
+      <p>Thought-Leadership bleibt, aber deutlich k&uuml;rzer. Jetzt mit AMBESA-Bezug.</p>
+      <div class="old">Vorher: ~250 W&ouml;rter + Bullet-Listen</div>
+      <div class="new">Jetzt: ~80 W&ouml;rter + kompakte Vergleichsbox</div>
+    </div>
+
+    <div class="note note-gold version-a-only" data-section="editorial" onclick="highlightSection('editorial')">
+      <div class="tag">Emotional</div>
+      <h3>Editorial: Erweiterte Version</h3>
+      <p>L&auml;ngere redaktionelle Behandlung. Erweiterte Regionalabdeckung (Southern, North, Central Africa).</p>
+      <div class="new">~3-4 Abs&auml;tze + tiefere Analyse</div>
+    </div>
+
+    <div class="note note-gold version-a-only" data-section="photo-grid" onclick="highlightSection('photo-grid')">
+      <div class="tag">Emotional</div>
+      <h3>Photo Grid</h3>
+      <p>3-Spalten-Fotogalerie (Manufacturing, Agriculture, Logistics). Erh&ouml;ht emotionale Bindung.</p>
+    </div>
+
+    <div class="note note-blue" data-section="why-ambesa" onclick="highlightSection('why-ambesa')">
+      <div class="tag">Vendor-Fokus</div>
+      <h3>Why AMBESA Benefits</h3>
+      <p>4 Gr&uuml;nde f&uuml;r Vendors: Pan-African Reach, Verified, Visibility, Free.</p>
+    </div>
+
+    <div class="note note-blue" data-section="spotlight" onclick="highlightSection('spotlight')">
+      <div class="tag">Proof</div>
+      <h3>Vendor Spotlight</h3>
+      <p>Case Study (Aligned Group). Zeigt konkrete Erfolge mit Results-Bar.</p>
+    </div>
+
+    <div class="note note-gold version-a-only" data-section="quote" onclick="highlightSection('quote')">
+      <div class="tag">Emotional</div>
+      <h3>Vendor Testimonial</h3>
+      <p>Dark-Green-Hintergrund mit Vendor-Zitat. Verst&auml;rkt Social Proof.</p>
+      <div class="new">[PLACEHOLDER &mdash; Echtes Zitat]</div>
+    </div>
+
+    <div class="note note-red version-b-only" data-section="events" onclick="highlightSection('events')">
+      <div class="tag">Gek&uuml;rzt</div>
+      <h3>Events: Kompakter</h3>
+      <p>Gleiche 3 Events als kompakte Karten. Neuer Nudge: &bdquo;Buyers check before they meet.&ldquo;</p>
+    </div>
+
+    <div class="note note-red version-a-only" data-section="events" onclick="highlightSection('events')">
+      <div class="tag">Emotional</div>
+      <h3>Events: Detailliert</h3>
+      <p>Gleiche 3 Events mit l&auml;ngeren Beschreibungen und Kontextinfos.</p>
+    </div>
+
+    <div class="note note-blue" data-section="funding" onclick="highlightSection('funding')">
+      <div class="tag">Ressourcen · Proof</div>
+      <h3>SME Funding</h3>
+      <p>3 Programme als gestapelte Karten. PAPSS &middot; Afreximbank &middot; Sanad Fund</p>
+      <p style="margin-top:6px;font-size:11px;color:#888;">Teil der Proof-Stage: zeigt Vendors ein professionelles &Ouml;kosystem &mdash; senkt Risiko-Wahrnehmung.</p>
+    </div>
+
+    <div class="note note-gold version-a-only" data-section="cta-final" onclick="highlightSection('cta-final')">
+      <div class="tag">Emotional</div>
+      <h3>Final CTA: Emotional</h3>
+      <p>&bdquo;Your Next Chapter Starts Here&ldquo; &mdash; aspirational copy</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- JavaScript: Scroll tracking, version switching, highlighting -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+// ── Scroll progress indicator ──
+window.addEventListener('scroll', function() {
+  var scrollProgress = document.getElementById('scrollProgress');
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var scrolled = window.scrollY / docHeight;
+  scrollProgress.style.width = (scrolled * 100) + '%';
+});
+
+// ── Section highlighting on click ──
+function highlightSection(sectionId) {
+  // Find section inside the active newsletter
+  var activeNL = document.querySelector('#newsletter-a[style*="block"], #newsletter-b[style*="block"]')
+    || document.getElementById('newsletter-b');
+  var section = activeNL ? activeNL.querySelector('#sec-' + sectionId) : null;
+  if (!section) section = document.getElementById('sec-' + sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    section.style.outline = '3px solid #d4a843';
+    section.style.outlineOffset = '-3px';
+    setTimeout(function() {
+      section.style.outline = '';
+      section.style.outlineOffset = '';
+    }, 3000);
+  }
+}
+
+// ── Align annotation notes to their target sections ──
+var currentVersion = 'a';
+
+function alignNotes() {
+  var colRight = document.getElementById('col-right');
+  var activeNL = document.getElementById('newsletter-' + currentVersion);
+  if (!colRight || !activeNL) return;
+
+  var colTop = colRight.offsetTop;
+  var centerCol = document.querySelector('.col-center');
+
+  var notes = colRight.querySelectorAll('.note');
+  var minTop = 0; // track previous note bottom to prevent overlap
+
+  for (var i = 0; i < notes.length; i++) {
+    var note = notes[i];
+
+    // Check visibility: skip hidden notes
+    var isAOnly = note.classList.contains('version-a-only');
+    var isBOnly = note.classList.contains('version-b-only');
+    if (isAOnly && currentVersion === 'b') { note.style.display = 'none'; continue; }
+    if (isBOnly && currentVersion === 'a') { note.style.display = 'none'; continue; }
+    note.style.display = 'block';
+
+    var sectionName = note.getAttribute('data-section');
+    if (!sectionName) continue;
+
+    // Find matching section in active newsletter
+    var section = activeNL.querySelector('#sec-' + sectionName);
+    if (!section) continue;
+
+    // Calculate target top relative to col-right
+    var sectionRect = section.getBoundingClientRect();
+    var centerRect = centerCol.getBoundingClientRect();
+    var relativeTop = (sectionRect.top - centerRect.top) + (centerCol.offsetTop - colTop);
+
+    // Prevent overlap with previous note
+    var targetTop = Math.max(relativeTop, minTop);
+    note.style.top = targetTop + 'px';
+
+    minTop = targetTop + note.offsetHeight + 12; // 12px gap between notes
+  }
+
+  // Set column height to accommodate all notes
+  colRight.style.minHeight = minTop + 'px';
+}
+
+// ── Align funnel stage markers to their target sections ──
+function alignStageMarkers() {
+  var activeNL = document.getElementById('newsletter-' + currentVersion);
+  var centerCol = document.querySelector('.col-center');
+  if (!activeNL || !centerCol) return;
+
+  var markers = document.querySelectorAll('.stage-marker');
+  for (var i = 0; i < markers.length; i++) {
+    var marker = markers[i];
+    var sectionName = marker.getAttribute('data-stage-section');
+    if (!sectionName) continue;
+
+    var section = activeNL.querySelector('#sec-' + sectionName);
+    if (!section) { marker.style.display = 'none'; continue; }
+    marker.style.display = 'flex';
+
+    // Position relative to col-center
+    var sectionRect = section.getBoundingClientRect();
+    var centerRect = centerCol.getBoundingClientRect();
+    var relativeTop = sectionRect.top - centerRect.top;
+
+    marker.style.top = relativeTop + 'px';
+  }
+}
+
+// ── Tab switching ──
+function switchVersion(version) {
+  currentVersion = version;
+  var tabA = document.getElementById('tab-a-btn');
+  var tabB = document.getElementById('tab-b-btn');
+  var nlA = document.getElementById('newsletter-a');
+  var nlB = document.getElementById('newsletter-b');
+
+  if (version === 'a') {
+    tabA.classList.add('active');
+    tabB.classList.remove('active');
+    nlA.classList.add('active');
+    nlA.style.display = 'block';
+    nlB.classList.remove('active');
+    nlB.style.display = 'none';
+  } else {
+    tabB.classList.add('active');
+    tabA.classList.remove('active');
+    nlB.classList.add('active');
+    nlB.style.display = 'block';
+    nlA.classList.remove('active');
+    nlA.style.display = 'none';
+  }
+
+  // Re-align notes and stage markers after DOM reflow
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      alignNotes();
+      alignStageMarkers();
+    });
+  });
+}
+
+// ── Align old newsletter screenshot to start where newsletter content starts ──
+function alignOldNewsletter() {
+  var tabsWrapper = document.querySelector('.newsletter-tabs-wrapper');
+  var colLeft = document.getElementById('col-left');
+  if (tabsWrapper && colLeft) {
+    colLeft.style.paddingTop = tabsWrapper.offsetHeight + 20 + 'px';
+  }
+}
+
+// ── Init ──
+window.addEventListener('load', function() {
+  alignOldNewsletter();
+  alignNotes();
+  alignStageMarkers();
+});
+window.addEventListener('resize', function() {
+  alignOldNewsletter();
+  alignNotes();
+  alignStageMarkers();
+});
+</script>
+
+</body>
+</html>
