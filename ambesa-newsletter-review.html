@@ -1949,7 +1949,7 @@
     <p style="margin:0;font-size:14px;color:#888;max-width:600px;display:inline-block;">Instead of sending newsletter clicks to the homepage, a dedicated landing page captures the visitor at peak interest &mdash; continuing the story the newsletter started.</p>
   </div>
 
-  <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:30px;align-items:start;">
+  <div style="display:grid;grid-template-columns:800px 1fr;gap:30px;align-items:start;">
 
     <!-- Browser Mockup -->
     <div style="background:#fff;border-radius:12px;padding:30px;box-shadow:0 2px 8px rgba(0,0,0,0.06);min-width:0;">
@@ -2165,7 +2165,7 @@
     <p style="margin:0;font-size:14px;color:#888;max-width:620px;display:inline-block;">The current homepage has strong content but could benefit from a clearer visual hierarchy, a more compelling hero, and stronger conversion paths for both buyers and vendors.</p>
   </div>
 
-  <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:30px;align-items:start;">
+  <div style="display:grid;grid-template-columns:800px 1fr;gap:30px;align-items:start;">
 
     <!-- Browser Mockup: Improved Homepage -->
     <div style="background:#fff;border-radius:12px;padding:30px;box-shadow:0 2px 8px rgba(0,0,0,0.06);min-width:0;">
@@ -2200,28 +2200,33 @@
             </div>
           </div>
 
-          <!-- Hero: Split layout -->
-          <div style="background:linear-gradient(135deg,#1a3c2a 0%,#245a3a 100%);padding:28px 24px;display:flex;gap:20px;align-items:center;">
-            <!-- Left: Text -->
-            <div style="flex:1;">
-              <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#d4a843;margin-bottom:4px;">Pan-African B2B Marketplace</div>
-              <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.2;">Source. Connect.<br/>Grow Across Africa.</div>
-              <div style="font-size:10px;color:#c8dcc8;margin-bottom:12px;line-height:1.5;">Join 500+ verified vendors and thousands of buyers across 12+ African countries.</div>
+          <!-- Hero: Image with big headline -->
+          <div style="position:relative;overflow:hidden;height:180px;">
+            <img src="images/hero-handshake.png" alt="" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+            <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.2) 100%);"></div>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 24px;">
+              <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px;">Source. Connect.<br/>Grow Across Africa.</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.85);margin-bottom:14px;max-width:280px;line-height:1.5;">Join 500+ verified vendors and thousands of buyers across 12+ African countries.</div>
               <div style="display:flex;gap:8px;">
                 <div style="padding:6px 16px;background:linear-gradient(to bottom,#e6be5a,#b8913a);border-radius:50px;color:#fff;font-size:10px;font-weight:700;">Find Products</div>
-                <div style="padding:6px 16px;border:1px solid #d4a843;border-radius:50px;color:#d4a843;font-size:10px;font-weight:600;">Become a Vendor</div>
+                <div style="padding:6px 16px;border:1px solid rgba(255,255,255,0.5);border-radius:50px;color:#fff;font-size:10px;font-weight:600;">Become a Vendor</div>
               </div>
             </div>
-            <!-- Right: Trust indicators -->
-            <div style="width:140px;flex-shrink:0;">
-              <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:12px;text-align:center;">
-                <div style="font-size:22px;font-weight:800;color:#d4a843;">12+</div>
-                <div style="font-size:8px;color:#c8dcc8;margin-bottom:8px;">Countries</div>
-                <div style="font-size:22px;font-weight:800;color:#d4a843;">500+</div>
-                <div style="font-size:8px;color:#c8dcc8;margin-bottom:8px;">Vendors</div>
-                <div style="font-size:22px;font-weight:800;color:#d4a843;">3k+</div>
-                <div style="font-size:8px;color:#c8dcc8;">Active Buyers</div>
-              </div>
+          </div>
+
+          <!-- Trust Numbers Bar -->
+          <div style="background:#1a3c2a;padding:10px 20px;display:flex;justify-content:center;gap:30px;">
+            <div style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;color:#d4a843;">12+</div>
+              <div style="font-size:7px;color:#c8dcc8;">Countries</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;color:#d4a843;">500+</div>
+              <div style="font-size:7px;color:#c8dcc8;">Vendors</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;color:#d4a843;">3k+</div>
+              <div style="font-size:7px;color:#c8dcc8;">Active Buyers</div>
             </div>
           </div>
 
